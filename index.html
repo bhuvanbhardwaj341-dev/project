@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Bug Battle | Learn. Debug. Win.</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#080b16;
+    color:white;
+}
+
+/* NAVBAR */
+nav{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 7%;
+    background:#0d1222;
+    border-bottom:1px solid #222a40;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+    color:#00eaff;
+}
+
+nav a{
+    color:#ddd;
+    text-decoration:none;
+    margin-left:25px;
+}
+
+nav a:hover{
+    color:#00eaff;
+}
+
+/* HERO */
+.hero{
+    min-height:650px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:50px 20px;
+    background:
+    radial-gradient(circle at center,#12285c 0%,#080b16 55%);
+}
+
+.hero h1{
+    font-size:70px;
+    color:#00eaff;
+    text-shadow:0 0 25px #00eaff;
+}
+
+.hero h2{
+    font-size:28px;
+    margin:15px 0;
+}
+
+.hero p{
+    max-width:700px;
+    margin:20px auto;
+    color:#b9c1d9;
+    line-height:1.7;
+}
+
+.btn{
+    display:inline-block;
+    padding:15px 30px;
+    margin:10px;
+    border-radius:30px;
+    background:#00eaff;
+    color:#06101b;
+    font-weight:bold;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:scale(1.08);
+    box-shadow:0 0 25px #00eaff;
+}
+
+.btn.dark{
+    background:#171e33;
+    color:white;
+}
+
+/* SECTIONS */
+section{
+    padding:80px 7%;
+}
+
+.title{
+    text-align:center;
+    font-size:38px;
+    margin-bottom:50px;
+}
+
+.title span{
+    color:#00eaff;
+}
+
+/* CARDS */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:#101629;
+    padding:30px;
+    border:1px solid #252f4c;
+    border-radius:18px;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    border-color:#00eaff;
+    box-shadow:0 0 25px #00eaff22;
+}
+
+.card h3{
+    margin-bottom:15px;
+    color:#00eaff;
+}
+
+.card p{
+    color:#aeb8d2;
+    line-height:1.6;
+}
+
+/* LANGUAGES */
+.lang{
+    text-align:center;
+    font-size:20px;
+    padding:25px;
+}
+
+/* BUG FINDER */
+.bug-box{
+    max-width:850px;
+    margin:auto;
+    background:#101629;
+    padding:35px;
+    border-radius:20px;
+    border:1px solid #293552;
+}
+
+.code{
+    background:#050812;
+    padding:25px;
+    border-radius:12px;
+    font-family:monospace;
+    font-size:18px;
+    margin:20px 0;
+    color:#ff6b81;
+}
+
+.option{
+    width:100%;
+    padding:15px;
+    margin:8px 0;
+    background:#171f35;
+    border:1px solid #303b59;
+    color:white;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:left;
+}
+
+.option:hover{
+    border-color:#00eaff;
+}
+
+#result{
+    margin-top:20px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+/* XP */
+.xp-box{
+    max-width:600px;
+    margin:auto;
+    text-align:center;
+}
+
+.xp{
+    font-size:45px;
+    color:#ffd43b;
+    text-shadow:0 0 15px #ffd43b;
+}
+
+.progress{
+    height:18px;
+    background:#20283e;
+    border-radius:20px;
+    overflow:hidden;
+    margin:20px 0;
+}
+
+.progress-bar{
+    width:65%;
+    height:100%;
+    background:#00eaff;
+}
+
+/* LEADERBOARD */
+table{
+    width:100%;
+    max-width:800px;
+    margin:auto;
+    border-collapse:collapse;
+    background:#101629;
+    border-radius:15px;
+    overflow:hidden;
+}
+
+th,td{
+    padding:18px;
+    text-align:center;
+    border-bottom:1px solid #29334d;
+}
+
+th{
+    color:#00eaff;
+}
+
+/* FOOTER */
+footer{
+    text-align:center;
+    padding:40px;
+    background:#050812;
+    color:#8993ad;
+}
+
+@media(max-width:700px){
+    .hero h1{
+        font-size:45px;
+    }
+
+    nav{
+        padding:0 4%;
+    }
+
+    nav div:last-child{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">🐞 BUG BATTLE</div>
+
+    <div>
+        <a href="#home">Home</a>
+        <a href="#learn">Learn</a>
+        <a href="#bug">Bug Finder</a>
+        <a href="#leaderboard">Leaderboard</a>
+    </div>
+</nav>
+
+
+<!-- HERO -->
+<section class="hero" id="home">
+    <div>
+        <h1>BUG BATTLE</h1>
+
+        <h2>Learn. Debug. Compete. Win.</h2>
+
+        <p>
+            Turn programming mistakes into exciting challenges.
+            Learn coding, find bugs, fix errors and earn XP.
+        </p>
+
+        <a href="#bug" class="btn">Start Bug Battle ⚔️</a>
+        <a href="#learn" class="btn dark">Explore Learning</a>
+    </div>
+</section>
+
+
+<!-- LEARNING -->
+<section id="learn">
+
+    <h2 class="title">
+        What You <span>Learn</span>
+    </h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Variables</h3>
+            <p>Understand variables and how they are used in programs.</p>
+        </div>
+
+        <div class="card">
+            <h3>If-Else</h3>
+            <p>Learn decision making and conditional statements.</p>
+        </div>
+
+        <div class="card">
+            <h3>Loops</h3>
+            <p>Practice repetitive programming tasks using loops.</p>
+        </div>
+
+        <div class="card">
+            <h3>Functions</h3>
+            <p>Build reusable blocks of code using functions.</p>
+        </div>
+
+        <div class="card">
+            <h3>Arrays / Lists</h3>
+            <p>Learn how to store and manage multiple values.</p>
+        </div>
+
+        <div class="card">
+            <h3>Algorithms</h3>
+            <p>Improve logical thinking through algorithmic problems.</p>
+        </div>
+
+        <div class="card">
+            <h3>Debugging</h3>
+            <p>Find coding mistakes and understand why errors happen.</p>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- LANGUAGES -->
+<section>
+
+    <h2 class="title">
+        Programming <span>Languages</span>
+    </h2>
+
+    <div class="cards">
+
+        <div class="card lang">C</div>
+        <div class="card lang">C++</div>
+        <div class="card lang">Python</div>
+        <div class="card lang">Java</div>
+        <div class="card lang">JavaScript</div>
+        <div class="card lang">HTML & CSS</div>
+
+    </div>
+
+</section>
+
+
+<!-- BUG FINDER -->
+<section id="bug">
+
+    <h2 class="title">
+        🐞 <span>Bug Finder</span>
+    </h2>
+
+    <div class="bug-box">
+
+        <h2>Find the Bug</h2>
+
+        <p style="margin-top:10px;color:#aeb8d2;">
+            Which line contains the error?
+        </p>
+
+        <div class="code">
+            if(a = b)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;printf("Equal");
+        </div>
+
+        <button class="option" onclick="checkAnswer(1)">
+            A. if(a = b)
+        </button>
+
+        <button class="option" onclick="checkAnswer(2)">
+            B. printf("Equal")
+        </button>
+
+        <button class="option" onclick="checkAnswer(3)">
+            C. No error
+        </button>
+
+        <div id="result"></div>
+
+    </div>
+
+</section>
+
+
+<!-- XP SYSTEM -->
+<section>
+
+    <h2 class="title">
+        🏆 <span>XP Reward System</span>
+    </h2>
+
+    <div class="xp-box">
+
+        <div class="xp">
+            <span id="xp">120</span> XP
+        </div>
+
+        <p style="color:#aeb8d2;margin-top:10px;">
+            Complete challenges to earn more XP.
+        </p>
+
+        <div class="progress">
+            <div class="progress-bar"></div>
+        </div>
+
+        <p>Next Level: 200 XP</p>
+
+    </div>
+
+</section>
+
+
+<!-- HOW TO WIN -->
+<section>
+
+    <h2 class="title">
+        ⚔️ How Players <span>Win</span>
+    </h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>🐞 Find Bugs</h3>
+            <p>Find coding errors correctly.</p>
+        </div>
+
+        <div class="card">
+            <h3>⚡ Submit Fast</h3>
+            <p>Get bonus XP for speed.</p>
+        </div>
+
+        <div class="card">
+            <h3>💡 Use Fewer Hints</h3>
+            <p>Challenge yourself and solve bugs independently.</p>
+        </div>
+
+        <div class="card">
+            <h3>🔥 Daily Challenges</h3>
+            <p>Complete daily challenges and maintain your streak.</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- LEADERBOARD -->
+<section id="leaderboard">
+
+    <h2 class="title">
+        🏆 <span>Leaderboard</span>
+    </h2>
+
+    <table>
+
+        <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>XP</th>
+            <th>Badge</th>
+        </tr>
+
+        <tr>
+            <td>🥇 1</td>
+            <td>CodeMaster</td>
+            <td>1250</td>
+            <td>🔥</td>
+        </tr>
+
+        <tr>
+            <td>🥈 2</td>
+            <td>BugHunter</td>
+            <td>1120</td>
+            <td>⚡</td>
+        </tr>
+
+        <tr>
+            <td>🥉 3</td>
+            <td>PythonPro</td>
+            <td>980</td>
+            <td>🐍</td>
+        </tr>
+
+        <tr>
+            <td>4</td>
+            <td>DebugKing</td>
+            <td>850</td>
+            <td>👑</td>
+        </tr>
+
+    </table>
+
+</section>
+
+
+<!-- FUTURE FEATURES -->
+<section>
+
+    <h2 class="title">
+        🚀 Future <span>Features</span>
+    </h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>🤖 AI Hints</h3>
+            <p>Get smart hints while solving bugs.</p>
+        </div>
+
+        <div class="card">
+            <h3>👥 Multiplayer Battle</h3>
+            <p>Compete against other programmers.</p>
+        </div>
+
+        <div class="card">
+            <h3>🎙️ Voice Explanation</h3>
+            <p>Learn programming concepts through voice explanations.</p>
+        </div>
+
+        <div class="card">
+            <h3>🌙 Dark Mode</h3>
+            <p>Enjoy a comfortable coding environment.</p>
+        </div>
+
+        <div class="card">
+            <h3>📊 Progress Report</h3>
+            <p>Track your coding and debugging progress.</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer>
+    <h2>🐞 BUG BATTLE</h2>
+    <p style="margin-top:10px;">
+        Learn • Debug • Compete • Win
+    </p>
+</footer>
+
+
+<script>
+
+let xp = 120;
+
+function checkAnswer(answer){
+
+    const result = document.getElementById("result");
+
+    if(answer === 1){
+
+        result.innerHTML =
+        "✅ Correct! The bug is '='. It should be '=='. +20 XP 🎉";
+
+        result.style.color = "#00ff9d";
+
+        xp += 20;
+
+        document.getElementById("xp").innerText = xp;
+
+    }else{
+
+        result.innerHTML =
+        "❌ Wrong Answer! Try again. -5 XP";
+
+        result.style.color = "#ff526d";
+
+        xp -= 5;
+
+        if(xp < 0) xp = 0;
+
+        document.getElementById("xp").innerText = xp;
+    }
+}
+
+</script>
+
+</body>
+</html>
